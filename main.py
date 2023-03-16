@@ -1,4 +1,6 @@
 import requests
+from send_email import send_email
+
 
 api_key = "58bc1a1409de4ec3824701545189e709"
 url = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=" \
@@ -10,8 +12,17 @@ r = requests.get(url)
 # Get a dictionary with data
 content = r.json()
 
+body = ""
 # Access article titles and descriptions
 for article in content["articles"]:
-				print(article["title"])
-				print(article["description"])
+			body = body + article["title"] + "\n" + article["description"] + 2*"\n"
+
+message = f"""\
+Subject: News
+
+{body} 
+"""
+message = message.encode('utf-8')
+send_email(message)
+
 
